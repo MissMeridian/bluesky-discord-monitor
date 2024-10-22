@@ -24,7 +24,7 @@ This isn't my best code, and I made this in about 3 hours, and it's my first pub
     ```
 4. With the new virtual environment created, install the requirements:
     ```bash
-    .venv/bin/pip install requirements.txt
+    .venv/bin/pip install -r requirements.txt
     ```
 5. [Set up your configuration.](https://github.com/MissMeridian/bluesky-discord-monitor/tree/main/README.md#configuration) Continue these steps when finished.
 6. Run **main.py** with the virtual environment:

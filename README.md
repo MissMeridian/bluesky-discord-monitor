@@ -69,6 +69,9 @@ The list corresponding to the DID inside of "**monitors**" contains the URLs whe
 
 ### Additional config values:
 
+#### xrpc_url
+The URL to the Personal Data Server (PDS). This is https://bsky.social by default unless you run your own.
+
 #### search_range
 The number of recent posts that will be pulled from an author's feed. This value can be adjusted (must be a whole integer), but please keep rate limits in mind.
 

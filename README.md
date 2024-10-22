@@ -12,7 +12,7 @@ This isn't my best code, and I made this in about 3 hours, and it's my first pub
     python -m pip install -r requirements.txt
     ```
     This will install all of the required libraries for the script.
-4. [Set up your configuration.](https://github.com/MissMeridian/bluesky-discord-monitor/new/main?filename=README.md#configuration) Continue these steps when finished.
+4. [Set up your configuration.](https://github.com/MissMeridian/bluesky-discord-monitor/tree/main/README.md#configuration) Continue these steps when finished.
 5. Open **main.py** or the **loop.bat** batch script. If there is an error, the **loop.bat** script will restart the Python code on its own.
 
 ### Linux:
@@ -26,7 +26,7 @@ This isn't my best code, and I made this in about 3 hours, and it's my first pub
     ```bash
     .venv/bin/pip install requirements.txt
     ```
-5. [Set up your configuration.](https://github.com/MissMeridian/bluesky-discord-monitor/new/main?filename=README.md#configuration) Continue these steps when finished.
+5. [Set up your configuration.](https://github.com/MissMeridian/bluesky-discord-monitor/tree/main/README.md#configuration) Continue these steps when finished.
 6. Run **main.py** with the virtual environment:
     ```bash
     .venv/bin/python3 main.py

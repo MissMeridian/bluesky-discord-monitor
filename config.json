@@ -1,0 +1,10 @@
+{
+    "xrpc_url": "https://bsky.social",
+    "handle": "your-bot-handle.bsky.social",
+    "password": "bot-password-here",
+    "search_range": 5,
+    "wait_time": 900,
+    "monitors": {
+        "did:plc:blahblahblahblah": ["https://discord-webhook-url-1","https://discord-webhook-url-2-and-beyond"]
+    }
+}

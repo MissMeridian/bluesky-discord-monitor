@@ -76,55 +76,56 @@ def login_client():
 
 def get_feed(client: Client, did: str, whooks: list, search_range: int):
     post_data = client.get_author_feed(actor=did, limit=search_range, filter="posts_with_replies")
-    #print(f"POST DATA: \n{post_data}\n\n")
     feed = post_data.feed
-    #print(f"FEED:\n{feed}\n\n")
     for post_item in feed:
         try:
             post = post_item.post
             author = post.author
             author_name = getattr(author, 'display_name', 'Unknown Author')  # Use dot notation
-            author_handle = getattr(author, 'handle', 'Unknown Handle')
+            author_handle = getattr(author, 'handle', 'handle.invalid')
             author_avatar = getattr(author, 'avatar', None)
             post_uri = getattr(post, 'uri', 'No URI available')
             post_id = post_uri.split('/')[-1]  # Extract the post ID from the URI
             post_url = f"https://bsky.app/profile/{author_handle}/post/{post_id}"
             author_did = post_uri.split('/')[2] # Extract the DID from the URI
-            if author_did == did:
-                is_archived = check_archive(post_url)
-                if not is_archived:
-                    log.info(f"New post from {author_handle} detected! ({post_url})")
-                    record = post.record
-                    post_text = getattr(record, 'text', 'No text available')
-                    record_timestamp = getattr(record, 'created_at', "1969-12-31T00:00:00.000Z")
-                    date_obj = datetime.strptime(record_timestamp, '%Y-%m-%dT%H:%M:%S.%fZ')
-                    date_obj = date_obj.replace(tzinfo=timezone.utc)
-                    timestamp = date_obj.timestamp()
-                    embed = post.embed
-                    try:
-                        # Try for embedded images. Sometimes this will call an exception if there are none.
-                        images = embed.images if embed else []
-                        image_urls = []
-                        image_alts = []
-                        for image in images:
-                            image_urls.append(image.fullsize) # Append fullsize image URL 
-                            image_alts.append(image.alt)
-                    except:
-                        log.debug("No image attached.")
-                        images = None
-                        image_urls = []
-                        image_alts = []
-                        try: 
-                            # Try for embedded videos, and pull a thumbnail if available.
-                            image_urls.append(embed.thumbnail)
-                        except:
-                            log.debug("No video attached.")
-                    mark_archived(post_url)
-                    discord_embed(whooks, author_name, author_handle, author_avatar, post_url, post_text, image_urls, image_alts, timestamp)
-                else:
-                    log.info(f"{post_url} already archived. Not posting!")
+            if author_handle == "handle.invalid":
+                log.warning(f"Pulled a post from an invalid handle! This will not be sent to the Discord webhook. (Post URI: {post_uri})\nThis could be because of a Bluesky network issue, or because of an invalid DNS record on the user's handle.\nIf you have a custom handle, verify your _atproto record is valid.\nIf you are running your own PDS, ensure that your PDS is reachable.")
             else:
-                log.info(f"{post_url} is a repost or liked post, and will be ignored since it was not posted by the monitored DID.")
+                if author_did == did:
+                    is_archived = check_archive(post_url)
+                    if not is_archived:
+                        log.info(f"New post from {author_handle} detected! ({post_url})")
+                        record = post.record
+                        post_text = getattr(record, 'text', 'No text available')
+                        record_timestamp = getattr(record, 'created_at', "1969-12-31T00:00:00.000Z")
+                        date_obj = datetime.strptime(record_timestamp, '%Y-%m-%dT%H:%M:%S.%fZ')
+                        date_obj = date_obj.replace(tzinfo=timezone.utc)
+                        timestamp = date_obj.timestamp()
+                        embed = post.embed
+                        try:
+                            # Try for embedded images. Sometimes this will call an exception if there are none.
+                            images = embed.images if embed else []
+                            image_urls = []
+                            image_alts = []
+                            for image in images:
+                                image_urls.append(image.fullsize) # Append fullsize image URL 
+                                image_alts.append(image.alt)
+                        except:
+                            log.debug("No image attached.")
+                            images = None
+                            image_urls = []
+                            image_alts = []
+                            try: 
+                                # Try for embedded videos, and pull a thumbnail if available.
+                                image_urls.append(embed.thumbnail)
+                            except:
+                                log.debug("No video attached.")
+                        mark_archived(post_url)
+                        discord_embed(whooks, author_name, author_handle, author_avatar, post_url, post_text, image_urls, image_alts, timestamp)
+                    else:
+                        log.info(f"{post_url} already archived. Not posting!")
+                else:
+                    log.info(f"{post_url} is a repost or liked post, and will be ignored since it was not posted by the monitored DID.")
         except Exception:
             log.error(f"Unexpected error occured while processing a post! Report this on the GitHub please!\n", exc_info=True)
 

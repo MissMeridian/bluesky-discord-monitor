@@ -1,2 +1,2 @@
-atproto==0.0.54
+atproto==0.0.58
 discord_webhook==1.3.1

@@ -1,3 +1,4 @@
+⚠ This repository is no longer maintained. You are welcome to fork it and do whatever you want to it.
 # Bluesky Discord Monitor
 A cheap Python script that monitors Bluesky author feeds for new posts and replies, and then relays them to Discord via webhooks. All setup is done in **config.json**, and author feeds are defined by their Decentralized Identifier (DID). 
 
